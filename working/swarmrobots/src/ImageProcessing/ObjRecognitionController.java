@@ -2,11 +2,13 @@ package ImageProcessing;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javafx.beans.property.IntegerProperty;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
@@ -117,7 +119,7 @@ public class ObjRecognitionController
 				};
 				
 				this.timer = Executors.newSingleThreadScheduledExecutor();
-				this.timer.scheduleAtFixedRate(frameGrabber, 0, 33, TimeUnit.MILLISECONDS);
+				this.timer.scheduleAtFixedRate(frameGrabber, 0, 10000, TimeUnit.MILLISECONDS);
 				
 				// update the button content
 				this.cameraButton.setText("Stop Camera");
@@ -182,7 +184,7 @@ public class ObjRecognitionController
 					
 					// remove some noise
 					Imgproc.blur(frame, blurredImage, new Size(7, 7));
-					
+
 					// convert the frame to HSV
 					Imgproc.cvtColor(blurredImage, hsvImage, Imgproc.COLOR_BGR2HSV);
 					
@@ -223,6 +225,14 @@ public class ObjRecognitionController
 					
 					// convert the Mat object (OpenCV) to Image (JavaFX)
 					imageToShow = mat2Image(frame);
+					for(int i = 0 ; i < morphOutput.rows() ; i++){
+						for(int j = 0 ; j < morphOutput.cols() ; j++){
+							//System.out.println(Arrays.toString(morphOutput.get(i,j)));
+							if(morphOutput.get(i,j)[0]>100) {
+								System.out.println(morphOutput.get(i, j)[0]);
+							}
+						}
+					}
 				}
 				
 			}
